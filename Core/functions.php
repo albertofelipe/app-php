@@ -1,5 +1,7 @@
 <?php
 
+use Core\Response;
+
 function dd($value)
 {
     echo "<pre>";
@@ -16,9 +18,18 @@ function urlIs($value)
 
 function authorize($condition, $status = Response::FORBIDDEN)
 {
-    if (!$condition) {
+    if (! $condition) {
         abort($status);
     }
+}
+
+function abort($code = 404)
+{
+    http_response_code($code);
+
+    require base_path("views/{$code}.php");
+
+    die();
 }
 
 function base_path($path)
@@ -29,5 +40,6 @@ function base_path($path)
 function view($path, $attributes = [])
 {
     extract($attributes);
+
     require base_path('views/' . $path);
 }
